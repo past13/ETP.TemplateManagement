@@ -20,13 +20,13 @@ public class QueryTemplateHandler : IRequestHandler<QueryTemplateCommand, Result
     
     public async Task<Result<TemplateDto>> Handle(QueryTemplateCommand command, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+        
         try
         {
-            var entity = await _repository.GetTemplateById(command.Id);
+            var entity = await _repository.GetTemplateById(command.Id, cancellationToken);
             
-            var result =  _mapper.Map<TemplateDto>(entity);
-            
-            return Result<TemplateDto>.Success(result);
+            return Result<TemplateDto>.Success(_mapper.Map<TemplateDto>(entity));
         }
         catch (Exception ex)
         {

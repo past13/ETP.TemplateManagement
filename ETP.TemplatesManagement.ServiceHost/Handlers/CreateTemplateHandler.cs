@@ -21,6 +21,8 @@ public class CreateTemplateHandler : IRequestHandler<CreateTemplateCommand, Resu
     
     public async Task<Result<TemplateDto>> Handle(CreateTemplateCommand command, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+        
         try
         {
             var entity = new TemplateEntity
@@ -46,11 +48,11 @@ public class CreateTemplateHandler : IRequestHandler<CreateTemplateCommand, Resu
                 CreatedAt = DateTimeOffset.UtcNow
             };
             
-            await _repository.CreateTemplate(entity);
+            await _repository.CreateTemplate(entity, cancellationToken);
 
-            var dto = _mapper.Map<TemplateDto>(entity);
+            var result = _mapper.Map<TemplateDto>(entity);
             
-            return Result<TemplateDto>.Success(dto);
+            return Result<TemplateDto>.Success(result);
         }
         catch (Exception ex)
         {

@@ -1,4 +1,4 @@
-﻿namespace ETP.TemplatesManagement.Data;
+﻿namespace ETP.TemplatesManagement.ServiceHost;
 
 public class MongoDbSettings
 {

@@ -1,5 +1,4 @@
-﻿using ETP.TemplatesManagement.SDK.Dto;
-using ETP.TemplatesManagement.ServiceHost.Commands;
+﻿using ETP.TemplatesManagement.ServiceHost.Commands;
 using ETP.TemplatesManagement.ServiceHost.Domain.Request;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -18,44 +17,44 @@ public class TemplateController : Controller
     }
     
     [HttpPost]
-    public async Task<IActionResult> CreateTemplate([FromBody]CreateTemplateRequest request)
+    public async Task<IActionResult> CreateTemplate([FromBody]CreateTemplateRequest request, CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(new CreateTemplateCommand(request.Title, request.AnchorPoint, request.Attributes));
+        var result = await _mediator.Send(new CreateTemplateCommand(request.Title, request.AnchorPoint, request.Attributes), cancellationToken);
         return Ok(result);
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetTemplateById(Guid id)
+    public async Task<IActionResult> GetTemplateById(Guid id, CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(new QueryTemplateCommand(id));
+        var result = await _mediator.Send(new QueryTemplateCommand(id), cancellationToken);
         return Ok(result);
     }
     
     [HttpPut]
-    public async Task<IActionResult> UpdateTemplate(UpdateTemplateRequest request)
+    public async Task<IActionResult> UpdateTemplate(UpdateTemplateRequest request, CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(new UpdateTemplateCommand(request.Id, request.Title, request.Attributes));
+        var result = await _mediator.Send(new UpdateTemplateCommand(request.Id, request.Title, request.Attributes), cancellationToken);
         return Ok(result);
     }
     
     [HttpDelete]
-    public async Task<IActionResult> DeleteTemplateById([FromQuery] Guid id)
+    public async Task<IActionResult> DeleteTemplateById([FromQuery] Guid id, CancellationToken cancellationToken = default)
     {
-        var result = await _mediator.Send(new DeleteTemplateCommand(id));
+        var result = await _mediator.Send(new DeleteTemplateCommand(id), cancellationToken);
         return Ok(result);
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetAllTemplates(SearchAnchorPointRequest request)
+    public async Task<IActionResult> GetAllTemplates(SearchRequest request, CancellationToken cancellationToken = default)
     {
-        // Todo: Returns a paginated list of all stored templates supporting sorting and filtering functionality by anchor point parts.
-        // var result = await _mediator.Send(new QueryTemplatesCommand(request));
-        return Ok(null);
+        var result = await _mediator.Send(new QueryAllTemplatesCommand(request), cancellationToken);
+        return Ok(result);
     }
     
-    [HttpPost("byAnchor")]
-    public async Task<IActionResult> GetTemplatesByAnchor(AnchorPointRequest anchorPoint)
+    [HttpPost("byAnchors")]
+    public async Task<IActionResult> GetTemplatesByAnchor(AnchorPointsRequest anchorPointRequest, CancellationToken cancellationToken = default)
     {
-        return Ok();
+        var result = await _mediator.Send(new QueryTemplatesByAnchorCommand(anchorPointRequest), cancellationToken);
+        return Ok(result);
     }
 }

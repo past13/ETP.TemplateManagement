@@ -11,8 +11,5 @@ public class TemplateMapper : Profile
     {
         CreateMap<TemplateEntity, TemplateDto>()
             .ReverseMap();
-        
-        CreateMap<TemplateRequest, TemplateEntity>()
-            .ReverseMap();
     }
 }

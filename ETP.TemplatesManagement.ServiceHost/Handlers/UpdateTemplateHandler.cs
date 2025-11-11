@@ -21,6 +21,8 @@ public class UpdateTemplateHandler : IRequestHandler<UpdateTemplateCommand, Resu
     
     public async Task<Result<TemplateDto>> Handle(UpdateTemplateCommand command, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+        
         try
         {
             var templateEntity = new TemplateEntity
@@ -35,7 +37,7 @@ public class UpdateTemplateHandler : IRequestHandler<UpdateTemplateCommand, Resu
                 }).ToList()
             };
             
-            var entity = await _repository.UpdateTemplate(templateEntity);
+            var entity = await _repository.UpdateTemplate(templateEntity, cancellationToken);
 
             var result = _mapper.Map<TemplateDto>(entity);
             

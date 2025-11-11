@@ -16,10 +16,11 @@ public class DeleteTemplateHandler : IRequestHandler<DeleteTemplateCommand, Resu
     
     public async Task<Result<bool>> Handle(DeleteTemplateCommand command, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+        
         try
         {
-            await _repository.DeleteTemplate(command.Id);
-            
+            await _repository.DeleteTemplate(command.Id, cancellationToken);
             return Result<bool>.Success(true);
         }
         catch (Exception ex)
